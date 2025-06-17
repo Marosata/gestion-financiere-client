@@ -26,31 +26,31 @@ export interface ContributionObjectif {
 
 const objectifService = {
   async getObjectifs(): Promise<Objectif[]> {
-    const response = await api.get('/objectifs');
+    const response = await api.get('/Objectifs');
     return response.data;
   },
 
   async getObjectifById(id: number): Promise<Objectif> {
-    const response = await api.get(`/objectifs/${id}`);
+    const response = await api.get(`/Objectifs/${id}`);
     return response.data;
   },
 
   async createObjectif(objectif: Omit<Objectif, 'id' | 'montantActuel' | 'pourcentageProgression' | 'dateCreation' | 'dateModification'>): Promise<Objectif> {
-    const response = await api.post('/objectifs', objectif);
+    const response = await api.post('/Objectifs', objectif);
     return response.data;
   },
 
   async updateObjectif(id: number, objectif: Partial<Objectif>): Promise<Objectif> {
-    const response = await api.put(`/objectifs/${id}`, objectif);
+    const response = await api.put(`/Objectifs/${id}`, objectif);
     return response.data;
   },
 
   async deleteObjectif(id: number): Promise<void> {
-    await api.delete(`/objectifs/${id}`);
+    await api.delete(`/Objectifs/${id}`);
   },
 
   async contribuer(id: number, contribution: ContributionObjectif): Promise<Objectif> {
-    const response = await api.post(`/objectifs/${id}/contribuer`, contribution);
+    const response = await api.post(`/Objectifs/${id}/contribuer`, contribution);
     return response.data;
   },
 
@@ -63,7 +63,7 @@ const objectifService = {
     montantTotalActuel: number;
     pourcentageGlobalProgression: number;
   }> {
-    const response = await api.get('/objectifs/stats');
+    const response = await api.get('/Objectifs/stats');
     return response.data;
   }
 };

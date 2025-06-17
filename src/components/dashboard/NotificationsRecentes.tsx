@@ -12,8 +12,12 @@ const NotificationsRecentes: React.FC = () => {
     const fetchNotifications = async () => {
       try {
         setLoading(true);
-        const data = await notificationService.getNotificationsNonLues();
-        setNotifications(data.slice(0, 5)); // Prendre les 5 dernières notifications non lues
+        const data = await notificationService.getNotifications();
+        // Prendre les 5 dernières notifications
+        const recentNotifications = data
+          .sort((a, b) => new Date(b.dateCreation).getTime() - new Date(a.dateCreation).getTime())
+          .slice(0, 5);
+        setNotifications(recentNotifications);
       } catch (err) {
         setError("Erreur lors du chargement des notifications");
         console.error("Erreur:", err);
@@ -38,12 +42,12 @@ const NotificationsRecentes: React.FC = () => {
     }
   };
 
-  const handleMarquerCommeLue = async (id: number) => {
+  const handleDeleteNotification = async (id: number) => {
     try {
-      await notificationService.marquerCommeLue(id);
+      await notificationService.deleteNotification(id);
       setNotifications(notifications.filter(notif => notif.id !== id));
     } catch (err) {
-      console.error("Erreur lors du marquage de la notification:", err);
+      console.error("Erreur lors de la suppression de la notification:", err);
     }
   };
 
@@ -72,7 +76,7 @@ const NotificationsRecentes: React.FC = () => {
     return (
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Notifications Récentes</h2>
-        <p className="text-gray-500 text-center py-4">Aucune notification non lue</p>
+        <p className="text-gray-500 text-center py-4">Aucune notification</p>
       </div>
     );
   }
@@ -81,14 +85,6 @@ const NotificationsRecentes: React.FC = () => {
     <div className="bg-white rounded-lg shadow-md p-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-gray-800">Notifications Récentes</h2>
-        {notifications.length > 0 && (
-          <button
-            onClick={() => notificationService.marquerToutesCommeLues()}
-            className="text-sm text-blue-600 hover:text-blue-800"
-          >
-            Tout marquer comme lu
-          </button>
-        )}
       </div>
 
       <div className="space-y-4">
@@ -108,10 +104,10 @@ const NotificationsRecentes: React.FC = () => {
               </p>
             </div>
             <button
-              onClick={() => handleMarquerCommeLue(notification.id)}
+              onClick={() => handleDeleteNotification(notification.id)}
               className="flex-shrink-0 text-sm text-gray-400 hover:text-gray-600"
             >
-              Marquer comme lu
+              Supprimer
             </button>
           </div>
         ))}

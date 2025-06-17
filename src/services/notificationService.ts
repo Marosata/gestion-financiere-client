@@ -14,25 +14,23 @@ export interface Notification {
 const notificationService = {
   async getNotifications(): Promise<Notification[]> {
     const response = await api.get('/Notifications');
-    console.log(response)
     return response.data;
   },
 
-  async getNotificationsNonLues(): Promise<Notification[]> {
-    const response = await api.get('/notifications/non-lues');
-    return response.data;
+  async deleteNotification(id: number): Promise<void> {
+    await api.delete(`/Notifications/${id}`);
   },
 
   async marquerCommeLue(id: number): Promise<void> {
-    await api.put(`/notifications/${id}/lue`);
+    await api.put(`/Notifications/${id}/lue`, {});
   },
 
-  async marquerToutesCommeLues(): Promise<void> {
-    await api.put('/notifications/marquer-toutes-lues');
+  async verifierBudgets(): Promise<void> {
+    await api.post('/Notifications/verifier-budgets');
   },
 
-  async supprimerNotification(id: number): Promise<void> {
-    await api.delete(`/notifications/${id}`);
+  async verifierSoldes(): Promise<void> {
+    await api.post('/Notifications/verifier-soldes');
   }
 };
 

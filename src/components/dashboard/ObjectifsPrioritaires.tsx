@@ -15,7 +15,13 @@ const ObjectifsPrioritaires: React.FC = () => {
         // Trier par priorité et prendre les 3 premiers
         const objectifsPrioritaires = data
           .filter(obj => obj.priorite === 'HAUTE')
-          .sort((a, b) => new Date(a.dateCible).getTime() - new Date(b.dateCible).getTime())
+          .sort((a, b) => {
+            // D'abord par pourcentage de progression décroissant
+            const progressionDiff = b.pourcentageProgression - a.pourcentageProgression;
+            if (progressionDiff !== 0) return progressionDiff;
+            // Ensuite par date cible croissante
+            return new Date(a.dateCible).getTime() - new Date(b.dateCible).getTime();
+          })
           .slice(0, 3);
         setObjectifs(objectifsPrioritaires);
       } catch (err) {
@@ -30,9 +36,9 @@ const ObjectifsPrioritaires: React.FC = () => {
   }, []);
 
   const formatMontant = (montant: number) => {
-    return new Intl.NumberFormat('fr-FR', {
+    return new Intl.NumberFormat('mg-MG', {
       style: 'currency',
-      currency: 'EUR'
+      currency: 'MGA'
     }).format(montant);
   };
 
